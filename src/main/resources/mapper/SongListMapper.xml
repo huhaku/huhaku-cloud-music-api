@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="info.ggdog.music.dao.SongListMapper">
+    <select id="findAllName" resultType="String">
+        SELECT `name` FROM `song_list`
+    </select>
+    <insert id="saveAll" parameterType="Map">
+        INSERT INTO `song_list` (`name`, `time`)
+        VALUES
+        <foreach collection ="dirItem" item="item" separator =",">
+          (#{item.name}, #{item.time})
+        </foreach>
+    </insert>
+    <select id="findByName" parameterType="String" resultType="Long">
+        SELECT
+          `id`
+        FROM
+          `song_list`
+        WHERE `name` = #{songListName}
+    </select>
+    <delete id="deleteAll">
+        DELETE FROM `song_list`
+    </delete>
+    <select id="findAll" resultType="Map">
+        SELECT
+          `id`,
+          `name`,
+          `time`,
+          `num`
+        FROM
+          `song_list`
+    </select>
+
+    <select id="search" resultType="Map">
+        SELECT
+          s.`id`,
+          s.`mid`,
+          s.`name`,
+          s.`singer`,
+          s.`album`,
+          s.`cover`,
+          s.`path`,
+          s.`num`
+        FROM
+          `song` AS s
+          INNER JOIN `song_list_map` AS slm
+            ON s.`id` = slm.`song_id`
+          INNER JOIN `song_list` AS sl
+            ON sl.`id` = slm.`song_list_id`
+        WHERE sl.`name` = #{w}
+        limit #{p},#{n}
+    </select>
+    <update id="addOne">
+        UPDATE
+          `song_list`
+        SET
+          `num` = `num` + 1
+        WHERE `name` = #{w}
+    </update>
+</mapper>

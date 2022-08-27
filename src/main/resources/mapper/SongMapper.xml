@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="info.ggdog.music.dao.SongMapper">
+    <select id="findAllFilePath" resultType="String">
+        SELECT path FROM `song`
+    </select>
+    <insert id="insert" parameterType="info.ggdog.music.pojo.Song" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `song` (
+          `mid`,
+          `name`,
+          `singer`,
+          `album`,
+          `cover`,
+          `path`
+        )
+        VALUES
+          (
+            #{song.mid},
+            #{song.name},
+            #{song.singer},
+            #{song.album},
+            #{song.cover},
+            #{song.path}
+          )
+    </insert>
+    <delete id="deleteAll">
+        DELETE FROM `song`
+    </delete>
+    <select id="search" resultType="Map">
+        SELECT
+          s.`id`,
+          s.`mid`,
+          s.`name`,
+          s.`singer`,
+          s.`album`,
+          s.`cover`,
+          s.`path`,
+          s.`num`
+        FROM
+          `song` AS s
+        WHERE s.`name` LIKE CONCAT("%", #{w}, "%")
+        limit #{p},#{n}
+    </select>
+    <select id="findSongByMid" resultType="Map" parameterType="String">
+        SELECT
+          s.`id`,
+          s.`mid`,
+          s.`name`,
+          s.`singer`,
+          s.`album`,
+          s.`cover`,
+          s.`path`,
+          s.`num`
+        FROM
+          `song` AS s
+        WHERE s.`mid` = #{songmid}
+    </select>
+    <select id="fildImgPashByName" resultType="String" parameterType="String">
+      SELECT
+          s.`cover`
+        FROM
+          `song` AS s
+        WHERE s.`name` = #{name}
+        limit 1;
+    </select>
+    <update id="addOne">
+        UPDATE
+          `song`
+        SET
+          `num` = `num` + 1
+        WHERE `mid` = #{songmid}
+    </update>
+</mapper>

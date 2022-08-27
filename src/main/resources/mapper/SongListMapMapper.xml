@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="info.ggdog.music.dao.SongListMapMapper">
+    <insert id="install" parameterType="info.ggdog.music.pojo.SongListMap">
+        INSERT INTO `song_list_map` (`song_list_id`, `song_id`)
+        VALUES
+          (#{songListMap.songListId}, #{songListMap.songId})
+    </insert>
+    <delete id="deleteAll">
+        DELETE FROM `song_list_map`
+    </delete>
+</mapper>
